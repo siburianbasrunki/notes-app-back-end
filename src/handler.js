@@ -50,6 +50,7 @@ const addoneBooks = (request, h) => {
     reading,
     insertedAt,
     updatedAt,
+    bookId: id,
   };
 
   books.push(newBook);
@@ -59,6 +60,7 @@ const addoneBooks = (request, h) => {
       status: "success",
       message: "Buku berhasil ditambahkan",
       data: {
+        bookId: id,
         book: newBook,
       },
     })
@@ -100,12 +102,12 @@ const getAllBooks = (request, h) => {
 };
 
 const getBookById = (request, h) => {
-  const { id } = request.params;
-  const book = books.filter((n) => n.id === id)[0];
+  const { bookId } = request.params;
+  const book = books.filter((n) => n.bookId === bookId)[0];
 
   if (book !== undefined) {
     return {
-      status: "succes",
+      status: "success",
       data: {
         book,
       },
@@ -113,14 +115,13 @@ const getBookById = (request, h) => {
   }
   const response = h.response({
     status: "fail",
-    message: "Catatan tidak ditemukan",
+    message: "Buku tidak ditemukan",
   });
   response.code(404);
   return response;
 };
-
 const updateBookById = (request, h) => {
-  const { id } = request.params;
+  const { bookId } = request.params;
   const {
     name,
     year,
@@ -132,7 +133,7 @@ const updateBookById = (request, h) => {
     reading,
   } = request.payload;
 
-  const index = books.findIndex((book) => book.id === id);
+  const index = books.findIndex((book) => book.bookId === bookId);
 
   if (index === -1) {
     return h
@@ -185,7 +186,7 @@ const updateBookById = (request, h) => {
 const deleteBookById = (request, h) => {
   const { bookId } = request.params;
 
-  const index = books.findIndex((book) => book.id === bookId);
+  const index = books.findIndex((book) => book.bookId === bookId);
   if (index === -1) {
     return h
       .response({
